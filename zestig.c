@@ -186,10 +186,23 @@ static void do_entry(const u8 *entry, const char *parent_path)
 
 int main(int argc, char **argv)
 {
+	if(argc != 3)
+	{
+		fprintf(stderr, "Usage: %s nand-image output-dir\n", argv[0]);
+		return 1;
+	}
+	
 	get_key("default/nand-key", key, 16);
 
 	rom = map_rom(argv[1]);
+	
 	super = find_super();
+	if(!super)
+	{
+		fprintf(stderr, "Failed to find super\n");
+		return 1;
+	}
+	
 	fat = super + 0x0c;
 	fst = fat + 0x10000;
 
